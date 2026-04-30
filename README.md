@@ -20,6 +20,32 @@ npm install pg        # PostgreSQL
 npm install mysql2    # MySQL / MariaDB
 ```
 
+## 快速体验
+
+项目包含一个可运行的 `example/` 目录，复制后修改 `.env` 即可直接运行：
+
+```bash
+cd example
+npm install
+cp .env.example .env
+# 编辑 .env，填入你的 MySQL 连接信息
+npm start
+```
+
+目录结构：
+
+```
+example/
+├── src/index.ts               # 应用入口：调用 liquibase()
+├── migrations/
+│   ├── changelog.xml          # 变更日志入口
+│   ├── 001-initial-schema.sql # 建表（含 precondition 示例）
+│   ├── 002-add-indexes.sql    # 索引
+│   ├── 003-seed-data.sql      # 种子数据
+│   └── 004-js-migrations.js   # JS/TS 编程式变更集示例
+└── .env.example               # 配置模板
+```
+
 ## 配置参数
 
 `liquibase()` 函数接受一个 `MigrationConfig` 对象，以下是所有可配置参数：

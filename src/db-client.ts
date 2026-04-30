@@ -63,7 +63,7 @@ async function createMysqlClient(connection: DatabaseConnection): Promise<Databa
 
   return {
     async query(sql: string, params?: unknown[]): Promise<QueryResult> {
-      const [rows] = await pool.execute(sql, params as any) as [Record<string, unknown>[], any];
+      const [rows] = await pool.query(sql, params as any) as [Record<string, unknown>[], any];
       return { rows, rowCount: rows.length };
     },
     async transaction<T>(fn: (client: TransactionClient) => Promise<T>): Promise<T> {
@@ -72,7 +72,7 @@ async function createMysqlClient(connection: DatabaseConnection): Promise<Databa
         await conn.beginTransaction();
         const txClient: TransactionClient = {
           async query(sql: string, params?: unknown[]): Promise<QueryResult> {
-            const [rows] = await conn.execute(sql, params as any) as [Record<string, unknown>[], any];
+            const [rows] = await conn.query(sql, params as any) as [Record<string, unknown>[], any];
             return { rows, rowCount: rows.length };
           },
         };
