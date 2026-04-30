@@ -26,7 +26,8 @@ export async function checkPreconditions(
             return { status: 'failed', action: options.onError, reason: 'Invalid sql-check precondition' };
           }
           const queryResult = await client.query(precond.sql);
-          const actualValue = String(queryResult.rows[0]?.cnt ?? queryResult.rows[0]?.count ?? queryResult.rows[0]);
+          const row = queryResult.rows[0] || {};
+          const actualValue = String(row.cnt ?? row.count ?? row['COUNT(*)'] ?? row);
           result = actualValue === String(precond.expectedResult);
           break;
         }

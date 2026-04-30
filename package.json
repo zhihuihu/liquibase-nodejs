@@ -1,17 +1,50 @@
 {
   "name": "@nisec/liquibase",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Liquibase-compatible database migration tool for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
     "nisec-liquibase": "dist/cli.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build && npm run test",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "liquibase",
+    "database",
+    "migration",
+    "changelog",
+    "changeset",
+    "postgresql",
+    "mysql",
+    "mariadb",
+    "schema",
+    "cluster-safe"
+  ],
+  "license": "MIT",
+  "author": "huzhihui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nisec/liquibase-nodejs"
+  },
+  "bugs": {
+    "url": "https://github.com/nisec/liquibase-nodejs/issues"
+  },
+  "homepage": "https://github.com/nisec/liquibase-nodejs#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "mysql2": "^3.0.0",

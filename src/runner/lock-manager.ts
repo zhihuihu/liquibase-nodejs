@@ -47,12 +47,14 @@ export class LockManager {
       if (!isLocked) {
         const lockedBy = this.getLockedBy();
         try {
-          await this.client.query(
-            this.buildAcquireSql(lockedBy),
-          );
+          const sql = this.buildAcquireSql();
+          await this.client.query(sql, [lockedBy]);
           this.logger?.info('Lock acquired', { lockedBy });
           return { acquired: true, staleLockCleared: staleLockCleared || undefined };
-        } catch {
+        } catch (err) {
+          // 获取锁失败（可能是并发竞争），等待后重试
+          this.logger?.debug('Lock acquire failed, retrying', { error: err instanceof Error ? err.message : String(err) });
+          await this.sleep(this.config.pollIntervalMs);
           continue;
         }
       }
@@ -71,7 +73,7 @@ export class LockManager {
           );
 
           staleLockCleared = true;
-          continue;
+          // 清除后不继续等待，下次循环直接尝试获取
         }
       }
 
@@ -93,7 +95,7 @@ export class LockManager {
     this.logger?.debug('Lock released');
   }
 
-  private buildAcquireSql(lockedBy: string): string {
+  private buildAcquireSql(): string {
     const param = this.dialect === 'postgresql' ? '$1' : '?';
     return `UPDATE DATABASECHANGELOGLOCK SET LOCKED = TRUE, LOCKGRANTED = NOW(), LOCKEDBY = ${param} WHERE ID = 1`;
   }
