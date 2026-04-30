@@ -45,6 +45,9 @@ async function createPostgresClient(connection: DatabaseConnection): Promise<Dat
         client.release();
       }
     },
+    async close() {
+      await pool.end();
+    },
   };
 }
 
@@ -82,6 +85,9 @@ async function createMysqlClient(connection: DatabaseConnection): Promise<Databa
       } finally {
         conn.release();
       }
+    },
+    async close() {
+      await pool.end();
     },
   };
 }

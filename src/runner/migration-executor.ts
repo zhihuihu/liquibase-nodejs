@@ -117,12 +117,21 @@ export class MigrationExecutor {
   }
 
   private async executeSql(changeset: import('../types').SqlChangeset): Promise<void> {
+    const statements = changeset.sql
+      .split(';')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+
+    const runStatements = async (client: { query: (sql: string) => Promise<unknown> }) => {
+      for (const stmt of statements) {
+        await client.query(stmt);
+      }
+    };
+
     if (changeset.runInTransaction) {
-      await this.client.transaction(async (tx) => {
-        await tx.query(changeset.sql);
-      });
+      await this.client.transaction(runStatements);
     } else {
-      await this.client.query(changeset.sql);
+      await runStatements(this.client);
     }
   }
 

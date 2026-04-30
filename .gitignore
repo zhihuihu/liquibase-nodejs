@@ -9,6 +9,10 @@ dist/
 .env.local
 .env.*.local
 
+# Example env (keep .env.example)
+example/.env
+
+.claude/
 # IDE
 .vscode/
 .idea/

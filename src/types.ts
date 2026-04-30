@@ -81,6 +81,7 @@ export type Changeset = SqlChangeset | JsChangeset;
 export interface DatabaseClient {
   query(sql: string, params?: unknown[]): Promise<QueryResult>;
   transaction<T>(fn: (client: TransactionClient) => Promise<T>): Promise<T>;
+  close?(): Promise<void>;
 }
 
 export interface TransactionClient {

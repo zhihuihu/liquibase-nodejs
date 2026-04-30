@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "description": "Example usage of @nisec/liquibase",
+  "scripts": {
+    "start": "npx tsx src/index.ts"
+  },
+  "dependencies": {
+    "@nisec/liquibase": "file:.."
+  }
+}
